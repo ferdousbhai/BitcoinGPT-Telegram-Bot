@@ -6,7 +6,7 @@ import { webhookCallback } from "https://deno.land/x/grammy@v1.14.1/mod.ts";
 
 import bot from "./bot.ts";
 
-const handleUpdate = webhookCallback(bot, "std/http");
+const handleUpdate = webhookCallback(bot, "std/http"); // the webhook handler function
 
 serve(async (req) => {
   if (req.method === "POST") {
@@ -19,7 +19,7 @@ serve(async (req) => {
       }
     }
   }
-  return new Response();
+  return new Response(); // the default response for any requests that are not from the webhook (ignored by the server)
 });
 
 

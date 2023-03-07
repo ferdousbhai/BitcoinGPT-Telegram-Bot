@@ -1,4 +1,4 @@
-import "https://deno.land/std@0.178.0/dotenv/load.ts";
+// import "https://deno.land/std@0.178.0/dotenv/load.ts"; // Not required for Deno Deploy.
 import { Bot } from "https://deno.land/x/grammy@v1.14.1/mod.ts";
 
 const openaiKey = Deno.env.get("OPENAI_API_KEY");
@@ -37,7 +37,6 @@ async function fetchChatGPT(
         }),
       },
     );
-    apiCallCounter++;
     const data = await response.json();
     return data.choices[0].message.content;
   }
@@ -69,7 +68,7 @@ bot.on("message", async (ctx) => {
     console.log(error);
   }
   // Display the number of API calls
-  console.log(`Number of API calls so far: ${apiCallCounter}`);
+  console.log(`Number of API calls so far: ${++apiCallCounter}`);
   // Check if we've hit the API call limit
   if (apiCallCounter >= apiCallLimit) {
     console.log(`API call limit reached: ${apiCallLimit}`);
