@@ -9,41 +9,45 @@ type Message = {
   content: string;
 };
 
-async function fetchChatGPT(
-  chatMessages: Array<Message>,
-): Promise<string> {
-  const response = await fetch(
-    "https://api.openai.com/v1/chat/completions",
-    {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${openaiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        "model": "gpt-3.5-turbo",
-        messages: chatMessages,
-      }),
-    },
-  );
-  const data = await response.json();
-  return data.choices[0].message.content;
-}
-
 // Initialize an array of chat messages for context; the first message is the system message.
 const chatMessages = [{
   "role": "system",
-  "content":
-    "You are a fan of Bitcoin. You always respond with dark humor.",
+  "content": "You are a fan of Bitcoin. You always respond with dark humor.",
 }];
 
-// Keep track of API calls to keep costs down until we can start charging for this.
+// Keep track of API calls to keep costs down.
 let apiCallCounter = 0;
 const apiCallLimit = 10000;
 
+async function fetchChatGPT(
+  chatMessages: Array<Message>,
+): Promise<string|undefined> {
+  try {
+    const response = await fetch(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${openaiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "model": "gpt-3.5-turbo",
+          messages: chatMessages,
+        }),
+      },
+    );
+    apiCallCounter++;
+    const data = await response.json();
+    return data.choices[0].message.content;
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
 // Listen for messages
 bot.on("message", async (ctx) => {
-  // Get the text from the message
   const messageText = ctx.message?.text;
   // Push message text into chat messages array
   if (messageText && messageText.trim()) {
@@ -53,22 +57,23 @@ bot.on("message", async (ctx) => {
   if (chatMessages.length > 2) {
     chatMessages.splice(1, chatMessages.length - 2);
   }
-  console.log(`Chat messages: (${chatMessages.length})`)
-  console.log(chatMessages)
-  // Check if we've hit the API call limit
-  if (apiCallCounter >= apiCallLimit) {
-    console.log(`API call limit reached: ${apiCallLimit}`)
-    return;
-  }
+  console.log(`Chat messages: (${chatMessages.length})`);
+  console.log(chatMessages);
   // Send the chat messages as context to the OpenAI API
   const generatedText = await fetchChatGPT(chatMessages);
-  console.log(`Number of API calls this round: ${apiCallCounter++}`)
   // Reply with generated text
   try {
-    await ctx.reply(generatedText);
-    chatMessages.push({ "role": "assistant", "content": generatedText });
+    await ctx.reply(generatedText!);
+    chatMessages.push({ "role": "assistant", "content": generatedText! });
   } catch (error) {
     console.log(error);
+  }
+  // Display the number of API calls
+  console.log(`Number of API calls so far: ${apiCallCounter}`);
+  // Check if we've hit the API call limit
+  if (apiCallCounter >= apiCallLimit) {
+    console.log(`API call limit reached: ${apiCallLimit}`);
+    return;
   }
 });
 
