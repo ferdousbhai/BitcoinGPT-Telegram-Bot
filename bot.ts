@@ -1,4 +1,4 @@
-import "https://deno.land/std@0.178.0/dotenv/load.ts";
+// import "https://deno.land/std@0.178.0/dotenv/load.ts";
 import { Bot } from "https://deno.land/x/grammy@v1.14.1/mod.ts";
 
 const openaiKey = Deno.env.get("OPENAI_API_KEY");
@@ -76,9 +76,5 @@ bot.on("message", async (ctx) => {
     return;
   }
 });
-
-// Start the bot
-bot.start();
-console.log("Bot started");
 
 export default bot;

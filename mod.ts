@@ -1,3 +1,6 @@
+// Hosting with Deno Deploy
+// https://grammy.dev/hosting/deno-deploy.html
+
 import { serve } from "https://deno.land/std@0.178.0/http/server.ts";
 import { webhookCallback } from "https://deno.land/x/grammy@v1.14.1/mod.ts";
 // You might modify this to the correct way to import your `Bot` object.
@@ -18,3 +21,12 @@ serve(async (req) => {
   }
   return new Response();
 });
+
+
+// Configure the bot’s webhook settings:
+// https://api.telegram.org/bot<token>/setWebhook?url=<url>
+// replacing <token> with bot’s token, and <url> with the full URL of the app along with the path to the webhook handler.
+
+
+// TO DO:
+// We advise you to have your handler on some secret path rather than the root (/). Here, we are using the bot token (/<bot token>).
