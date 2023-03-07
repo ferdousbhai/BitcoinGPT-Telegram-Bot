@@ -1,8 +1,8 @@
 import "https://deno.land/std@0.178.0/dotenv/load.ts";
 import { Bot } from "https://deno.land/x/grammy@v1.14.1/mod.ts";
 
-const bot = new Bot(Deno.env.get("TELEGRAM_BOT_TOKEN")!);
 const openaiKey = Deno.env.get("OPENAI_API_KEY");
+const bot = new Bot(Deno.env.get("TELEGRAM_BOT_TOKEN")!);
 
 type Message = {
   role: string;
@@ -80,3 +80,5 @@ bot.on("message", async (ctx) => {
 // Start the bot
 bot.start();
 console.log("Bot started");
+
+export default bot;
