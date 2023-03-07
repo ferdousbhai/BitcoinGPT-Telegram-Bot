@@ -37,6 +37,10 @@ const chatMessages = [{
     "You are a fan of Bitcoin. You always respond with dark humor.",
 }];
 
+// Keep track of API calls to keep costs down until we can start charging for this.
+let apiCallCounter = 0;
+const apiCallLimit = 10000;
+
 // Listen for messages
 bot.on("message", async (ctx) => {
   // Get the text from the message
@@ -51,8 +55,14 @@ bot.on("message", async (ctx) => {
   }
   console.log(`Chat messages: (${chatMessages.length})`)
   console.log(chatMessages)
+  // Check if we've hit the API call limit
+  if (apiCallCounter >= apiCallLimit) {
+    console.log(`API call limit reached: ${apiCallLimit}`)
+    return;
+  }
   // Send the chat messages as context to the OpenAI API
   const generatedText = await fetchChatGPT(chatMessages);
+  console.log(`Number of API calls this round: ${apiCallCounter++}`)
   // Reply with generated text
   try {
     await ctx.reply(generatedText);
