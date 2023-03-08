@@ -1,12 +1,8 @@
 import { Bot } from "https://deno.land/x/grammy@v1.14.1/mod.ts";
+import { fetchChatGPT } from "./openai.ts";
 
-const openaiKey = Deno.env.get("OPENAI_API_KEY");
+
 const bot = new Bot(Deno.env.get("TELEGRAM_BOT_TOKEN")!);
-
-type Message = {
-  role: string;
-  content: string;
-};
 
 // Initialize an array of chat messages for context; the first message is the system message.
 const chatMessages = [{
@@ -18,31 +14,8 @@ const chatMessages = [{
 let apiCallCounter = 0;
 const apiCallLimit = 10000;
 
-async function fetchChatGPT(
-  chatMessages: Array<Message>,
-): Promise<string|undefined> {
-  try {
-    const response = await fetch(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${openaiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          "model": "gpt-3.5-turbo",
-          messages: chatMessages,
-        }),
-      },
-    );
-    const data = await response.json();
-    return data.choices[0].message.content;
-  }
-  catch (error) {
-    console.log(error);
-  }
-}
+// Start command
+bot.command("start", (ctx) => ctx.reply("Hello! I'm a bot that uses ChatGPT to generate responses to any Bitcoin-specific questions. I'm a bit quirky and still learning, so please be patient with me."));
 
 // Listen for messages
 bot.on("message", async (ctx) => {
