@@ -4,10 +4,10 @@ type Message = {
     role: string;
     content: string;
   };
-  
+
 export async function fetchChatGPT(
     chatMessages: Array<Message>,
-    temperature=.9
+    temperature=1.8
   ): Promise<string|undefined> {
     try {
       const response = await fetch(
