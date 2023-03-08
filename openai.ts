@@ -6,8 +6,7 @@ type Message = {
   };
 
 export async function fetchChatGPT(
-    chatMessages: Array<Message>,
-    temperature=1.8
+    chatMessages: Array<Message>
   ): Promise<string|undefined> {
     try {
       const response = await fetch(
@@ -21,7 +20,7 @@ export async function fetchChatGPT(
           body: JSON.stringify({
             model: "gpt-3.5-turbo",
             messages: chatMessages,
-            temperature: temperature,
+            temperature: 1.2,
           }),
         },
       );
