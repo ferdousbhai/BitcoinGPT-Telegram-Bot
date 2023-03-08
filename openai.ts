@@ -1,6 +1,5 @@
 const openaiKey = Deno.env.get("OPENAI_API_KEY");
 
-
 type Message = {
     role: string;
     content: string;
@@ -8,6 +7,7 @@ type Message = {
   
 export async function fetchChatGPT(
     chatMessages: Array<Message>,
+    temperature=.9
   ): Promise<string|undefined> {
     try {
       const response = await fetch(
@@ -19,9 +19,9 @@ export async function fetchChatGPT(
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            "model": "gpt-3.5-turbo",
+            model: "gpt-3.5-turbo",
             messages: chatMessages,
-            temperature: 0.9,
+            temperature: temperature,
           }),
         },
       );
