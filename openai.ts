@@ -19,8 +19,7 @@ export async function fetchChatGPT(
           },
           body: JSON.stringify({
             model: "gpt-3.5-turbo",
-            messages: chatMessages,
-            temperature: 1.2,
+            messages: chatMessages
           }),
         },
       );

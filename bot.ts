@@ -10,13 +10,10 @@ const chatMessages = [{
   content: systemPrompt,
 }];
 
-const CHAT_CONTEXT_LENGTH = 5; // Number of messages to use as context for the chat (not including the system message)
+const CHAT_CONTEXT_LENGTH = 3; // Number of messages to use as context for the chat (not including the system message)
 
 const bot = new Bot(Deno.env.get("TELEGRAM_BOT_TOKEN")!);
 
-// Keep track of API calls to keep costs down.
-let apiCallCounter = 0;
-const apiCallLimit = 10000;
 
 // Start command
 bot.command("start", (ctx) => ctx.reply("Hello! I'm Satoshi Nakamoto, the creator of Bitcoin. Ask me anything!"));
@@ -31,7 +28,6 @@ bot.on("message", async (ctx) => {
   if (chatMessages.length > CHAT_CONTEXT_LENGTH + 1) {
     chatMessages.splice(1, chatMessages.length - CHAT_CONTEXT_LENGTH - 1);
   }
-  console.log(`Chat messages: (${chatMessages.length})`);
   console.log(chatMessages);
   // Send the chat messages as context to the OpenAI API
   const generatedText = await fetchChatGPT(chatMessages);
@@ -41,13 +37,6 @@ bot.on("message", async (ctx) => {
     chatMessages.push({ "role": "assistant", "content": generatedText! });
   } catch (error) {
     console.log(error);
-  }
-  // Display the number of API calls
-  console.log(`Number of API calls so far: ${++apiCallCounter}`);
-  // Check if we've hit the API call limit
-  if (apiCallCounter >= apiCallLimit) {
-    console.log(`API call limit reached: ${apiCallLimit}`);
-    return;
   }
 });
 
