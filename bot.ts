@@ -1,21 +1,25 @@
 import { Bot } from "https://deno.land/x/grammy@v1.14.1/mod.ts";
 import { fetchChatGPT } from "./openai.ts";
 
+// Read the system prompt from a text file
+const systemPrompt = await Deno.readTextFile("./system.txt");
+
+// Initialize an array of chat messages for prompt context; the first message is the system message.
+const chatMessages = [{
+  role: "system",
+  content: systemPrompt,
+}];
+
+const CHAT_CONTEXT_LENGTH = 3; // Number of messages to use as context for the chat (not including the system message)
 
 const bot = new Bot(Deno.env.get("TELEGRAM_BOT_TOKEN")!);
-
-// Initialize an array of chat messages for context; the first message is the system message.
-const chatMessages = [{
-  "role": "system",
-  "content": "You are a fan of Bitcoin. You always respond with dark humor.",
-}];
 
 // Keep track of API calls to keep costs down.
 let apiCallCounter = 0;
 const apiCallLimit = 10000;
 
 // Start command
-bot.command("start", (ctx) => ctx.reply("Hello! I'm a bot that uses ChatGPT to generate responses to any Bitcoin-specific questions. I'm a bit quirky and still learning, so please be patient with me."));
+bot.command("start", (ctx) => ctx.reply("Hello! I'm Satoshi Nakamoto, the creator of Bitcoin. Ask me anything!"));
 
 // Listen for messages
 bot.on("message", async (ctx) => {
@@ -24,9 +28,8 @@ bot.on("message", async (ctx) => {
   if (messageText && messageText.trim()) {
     chatMessages.push({ "role": "user", "content": messageText });
   }
-  // Only keep the system message but set it up so that this can be easily changed to keep more messages later.
-  if (chatMessages.length > 2) {
-    chatMessages.splice(1, chatMessages.length - 2);
+  if (chatMessages.length > CHAT_CONTEXT_LENGTH + 1) {
+    chatMessages.splice(1, chatMessages.length - CHAT_CONTEXT_LENGTH - 1);
   }
   console.log(`Chat messages: (${chatMessages.length})`);
   console.log(chatMessages);
