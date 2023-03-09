@@ -10,7 +10,7 @@ const chatMessages = [{
   content: systemPrompt,
 }];
 
-const CHAT_CONTEXT_LENGTH = 3; // Number of messages to use as context for the chat (not including the system message)
+const CHAT_CONTEXT_LENGTH = 5; // Number of messages to use as context for the chat (not including the system message)
 
 const bot = new Bot(Deno.env.get("TELEGRAM_BOT_TOKEN")!);
 
