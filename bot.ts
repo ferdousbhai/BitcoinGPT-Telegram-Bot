@@ -87,5 +87,5 @@ function cleanUp() {
   chatBufferMemory.length = 0;
   // Reset state
   state.longTermMemory = ""
-  state.content = ""
+  state.content = systemInstructions
 }
