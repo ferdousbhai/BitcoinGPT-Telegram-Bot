@@ -5,15 +5,14 @@ import { State, updateLongTermMemory } from "./memory.ts";
 const systemInstructions = await Deno.readTextFile("./system.txt");
 
 const CHAT_BUFFER_SIZE = 2; // Number of recent turns to remember for chat context
-const chatHistory: Message[] = [];
-const chatBufferMemory: Message[] = [];
 
-// Initialize the state
+const chatHistory: Message[] = [];
+
 let state: State = {
-  role: "system",
-  content: systemInstructions,
-  longTermMemory: "",
-};
+    system: systemInstructions,
+    longTermMemory: "",
+    buffer: [],
+  };
 
 const bot = new Bot(Deno.env.get("TELEGRAM_BOT_TOKEN")!);
 
@@ -48,9 +47,9 @@ bot.on("message", async (ctx) => {
     // Add the user's message to the chat history
     chatHistory.push({ role: "user", content: messageText! });
     // Update the chat buffer
-    chatBufferMemory.push({ role: "user", content: messageText! });
-    if (chatBufferMemory.length > CHAT_BUFFER_SIZE*2) {
-      chatBufferMemory.splice(0, 2);
+    state.buffer.push({ role: "user", content: messageText! });
+    if (state.buffer.length > CHAT_BUFFER_SIZE*2) {
+      state.buffer.splice(0, 2);
     }
     // Call the ChatGPT API to generate a response
     const generatedText = await fetchChatGPT([
@@ -58,13 +57,13 @@ bot.on("message", async (ctx) => {
         role: "system",
         content: systemInstructions + '\n' + state.longTermMemory,
       },
-      ...chatBufferMemory,
+      ...state.buffer,
     ]);
     // Reply to the user
     try {
       await ctx.reply(generatedText!);
       chatHistory.push({ role: "assistant", content: generatedText! });
-      chatBufferMemory.push({ role: "assistant", content: generatedText! });
+      state.buffer.push({ role: "assistant", content: generatedText! });
       // Update the state with the new long term memory
       if(chatHistory.length > CHAT_BUFFER_SIZE * 2) {
         state = await updateLongTermMemory(state, messageText);
@@ -81,11 +80,7 @@ export default bot;
 
 // Helper function to reset the chat
 function cleanUp() {
-  // Clear the chat history
   chatHistory.length = 0;
-  // Clear the chat buffer
-  chatBufferMemory.length = 0;
-  // Reset state
-  state.longTermMemory = ""
-  state.content = systemInstructions
+  state.buffer.length = 0;
+  state.longTermMemory = "";
 }
