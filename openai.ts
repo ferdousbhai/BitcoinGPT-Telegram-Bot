@@ -1,12 +1,12 @@
 const openaiKey = Deno.env.get("OPENAI_API_KEY");
 
-type Message = {
-    role: string;
-    content: string;
-  };
+export interface Message {
+  role: "user" | "assistant" | "system";
+  content: string;
+}
 
 export async function fetchChatGPT(
-    chatMessages: Array<Message>
+    messages: Array<Message>
   ): Promise<string|undefined> {
     try {
       const response = await fetch(
@@ -19,7 +19,7 @@ export async function fetchChatGPT(
           },
           body: JSON.stringify({
             model: "gpt-3.5-turbo",
-            messages: chatMessages
+            messages: messages
           }),
         },
       );
