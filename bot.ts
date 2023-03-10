@@ -78,6 +78,7 @@ bot.on("message", async (ctx) => {
 export default bot;
 
 
+
 // Helper function to reset the chat
 function cleanUp() {
   chatHistory.length = 0;
