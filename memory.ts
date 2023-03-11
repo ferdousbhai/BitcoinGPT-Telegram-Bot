@@ -1,12 +1,12 @@
 import { fetchChatGPT, Message, messagesToText } from "./openai.ts";
-import { systemPrompt } from "./config.ts";
+import { character, systemPrompt } from "./config.ts";
 
 
 export async function summarizeConversation(
   summary: string,
   newMessages: Message[],
 ): Promise<string | undefined> {
-  const newMessageText = messagesToText(newMessages);
+  const newMessageText = messagesToText(character, newMessages);
   const completionText = await fetchChatGPT([
     {
       role: "system",

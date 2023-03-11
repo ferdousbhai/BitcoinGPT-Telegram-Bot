@@ -17,7 +17,9 @@ Deno.test("test fetchChatGPT", { permissions: { net: true, env: true, read: true
 });
 
 Deno.test("test messagesToText", () => {
-    const text = messagesToText([
+    const text = messagesToText(
+      'Satoshi Nakamoto',
+      [
         {
           role: "system",
           content: "You are Satoshi Nakamoto, the inventor of Bitcoin.",
