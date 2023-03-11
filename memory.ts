@@ -31,8 +31,8 @@ export async function fetchChatGPTWithHistory(
   const completionText = await fetchChatGPT([
     {
       role: "system",
-      content: systemPrompt + "/n" +
-        `The following is a friendly conversation between ${character} and a user. ${character} provides lots of specific details from this context.
+      content: systemPrompt +
+        `\nThe following is a friendly conversation between ${character} and a user. ${character} provides lots of specific details from this context.
         Current conversation: ${history}
         New lines of conversation:
         `,
