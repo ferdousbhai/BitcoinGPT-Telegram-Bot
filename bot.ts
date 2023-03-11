@@ -17,6 +17,7 @@ bot.on("message", async (ctx) => {
     await ctx.api.sendChatAction(ctx.chat.id, "typing");
     // Update the chat buffer with the user's message
     chatBuffer.push({ role: "user", content: messageText! });
+    console.log(chatBuffer); // Log the chat buffer
     // Call the ChatGPT API to generate a response
     const completionText = await fetchChatGPT([
       {
@@ -33,7 +34,6 @@ bot.on("message", async (ctx) => {
     if (chatBuffer.length > CHAT_TURN_BUFFER_SIZE * 2) {
       chatBuffer.splice(0, 2);
     }
-    console.log(chatBuffer);
   }
 });
 
