@@ -1,8 +1,14 @@
+import "https://deno.land/std@0.178.0/dotenv/load.ts";
+ 
 const openaiKey = Deno.env.get("OPENAI_API_KEY");
 
 export interface Message {
   role: "user" | "assistant" | "system";
   content: string;
+}
+
+export function messagesToText(messages: Message[]): string {
+  return messages.map((message) => `${message.role}: ${message.content}`).join("\n");
 }
 
 export async function fetchChatGPT(
