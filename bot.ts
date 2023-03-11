@@ -27,7 +27,7 @@ bot.on("message", async (ctx) => {
     await ctx.reply(completionText!);
     // Add response to the chat buffer
     chatBuffer.push({ role: "assistant", content: completionText! });
-    if (history) { console.log('Summary:\n'); }
+    if (history) { console.log('Summary:\n' + history); }
     console.log('*********************\n' + messagesToText(character, chatBuffer));
     // Update the history with the user's message
     if (chatBuffer.length > CHAT_TURN_BUFFER_SIZE * 2) {
