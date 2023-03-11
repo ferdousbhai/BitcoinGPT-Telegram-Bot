@@ -3,7 +3,7 @@ import { fetchChatGPT, Message } from "./openai.ts";
 
 const systemInstructions = await Deno.readTextFile("./system.txt");
 
-const CHAT_TURN_BUFFER_SIZE = 2; // Number of recent turns to remember for chat context
+const CHAT_TURN_BUFFER_SIZE = 1; // Number of recent turns to remember for chat context
 
 const chatBuffer = [] as Message[]; // Buffer of recent messages
 
