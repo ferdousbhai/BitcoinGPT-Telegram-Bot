@@ -1,12 +1,7 @@
 import { Bot } from "https://deno.land/x/grammy@v1.14.1/mod.ts";
 import { Message, messagesToText } from "./openai.ts";
 import { summarizeConversation, fetchChatGPTWithHistory } from "./memory.ts";
-
-const systemPrompt = await Deno.readTextFile("./system.txt");
-
-const character = "Satoshi Nakamoto";
-
-const CHAT_TURN_BUFFER_SIZE = 2; // Number of recent turns to remember for chat context
+import { character, systemPrompt, CHAT_TURN_BUFFER_SIZE } from "./config.ts";
 
 const chatBuffer = [] as Message[]; // Buffer of recent messages
 
@@ -35,7 +30,7 @@ bot.on("message", async (ctx) => {
     console.log('*********************'+ '\n' + messagesToText(chatBuffer)); // Log the chat buffer
     // Update the history with the user's message
     if (chatBuffer.length > CHAT_TURN_BUFFER_SIZE * 2) {
-      const lostChat = chatBuffer.splice(0, 2); // Remove the oldest 2 messages and save them for summarization
+      const lostChat = chatBuffer.splice(0, 2); // Remove the oldest turn and save them for summarization
       const summaryCompletion = await summarizeConversation(history, lostChat);
       history = summaryCompletion!;
     console.log('\n' + history);

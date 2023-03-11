@@ -1,6 +1,5 @@
 import { fetchChatGPT, Message, messagesToText } from "./openai.ts";
-
-const systemPrompt = await Deno.readTextFile("./system.txt");
+import { systemPrompt } from "./config.ts";
 
 
 export async function summarizeConversation(
