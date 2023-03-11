@@ -6,7 +6,7 @@ export interface Message {
 }
 
 export async function fetchChatGPT(
-    messages: Array<Message>
+    promptMessages: Array<Message>
   ): Promise<string|undefined> {
     try {
       const response = await fetch(
@@ -19,7 +19,7 @@ export async function fetchChatGPT(
           },
           body: JSON.stringify({
             model: "gpt-3.5-turbo",
-            messages: messages
+            messages: promptMessages
           }),
         },
       );
@@ -30,4 +30,3 @@ export async function fetchChatGPT(
       console.log(error);
     }
   }
-  

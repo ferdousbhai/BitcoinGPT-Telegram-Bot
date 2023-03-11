@@ -1,5 +1,3 @@
-// Host with Deno Deploy: https://grammy.dev/hosting/deno-deploy.html
-
 import { serve } from "https://deno.land/std@0.178.0/http/server.ts";
 import { webhookCallback } from "https://deno.land/x/grammy@v1.14.1/mod.ts";
 import bot from "./bot.ts";
@@ -12,7 +10,7 @@ serve(async (req) => {
   if (req.method === "POST") {
     const url = new URL(req.url);
     // We have the handler on some secret path rather than the root (/).
-    // Here, we are using the bot token (/<bot token>).
+    // Here, we are using the bot token (/<bot token>) as the path since it is a secret only revealed to the bot.
     if (url.pathname.slice(1) === bot.token) {
       try {
         return await handleUpdate(req);
