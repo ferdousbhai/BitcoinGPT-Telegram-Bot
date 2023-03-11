@@ -27,16 +27,16 @@ bot.on("message", async (ctx) => {
     await ctx.reply(completionText!);
     // Add response to the chat buffer
     chatBuffer.push({ role: "assistant", content: completionText! });
-    // Log the conversation
-    console.log('*********************\n')
-    if (history) { console.log('Summary:\n' + history); }
-    console.log(messagesToText(character, chatBuffer))); 
     // Update the history with the user's message
     if (chatBuffer.length > CHAT_TURN_BUFFER_SIZE * 2) {
       const oldMessages = chatBuffer.splice(0, 2); // Remove the oldest turn and save them for summarization
       const summary = await summarizeConversation(history, oldMessages)!;
       history = summary!;
     }
+    // Log the conversation
+    console.log('*********************\n')
+    if (history) { console.log('Summary:\n' + history); }
+    console.log(messagesToText(character, chatBuffer)); 
   }
 });
 
