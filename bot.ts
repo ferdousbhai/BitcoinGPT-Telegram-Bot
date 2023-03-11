@@ -30,10 +30,10 @@ bot.on("message", async (ctx) => {
     console.log('*********************'+ '\n' + messagesToText(chatBuffer)); // Log the chat buffer
     // Update the history with the user's message
     if (chatBuffer.length > CHAT_TURN_BUFFER_SIZE * 2) {
-      const lostChat = chatBuffer.splice(0, 2); // Remove the oldest turn and save them for summarization
-      const summaryCompletion = await summarizeConversation(history, lostChat);
-      history = summaryCompletion!;
-    console.log('\n' + history);
+      const oldMessages = chatBuffer.splice(0, 2); // Remove the oldest turn and save them for summarization
+      const summary = await summarizeConversation(history, oldMessages)!;
+      history = summary!;
+      console.log('\n' + 'Summary:' + history);
     }
   }
 });
