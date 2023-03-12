@@ -44,18 +44,14 @@ bot.on("message", async (ctx) => {
       history = await summarizeConversation(character, history, oldMessages);
     }
     // Log the conversation
-    logToConsole();
+    console.log('*********************\n');
+    console.log(messagesToText(character, chatBuffer));
+    if(history) { console.log('Summary:\n' + history); }
   }
 });
 
 export default bot;
 
-
-function logToConsole() {
-  console.log('*********************\n');
-  console.log(messagesToText(character, chatBuffer));
-  if(history) { console.log('Summary:\n' + history); }
-}
 
 // deno-lint-ignore no-explicit-any
 async function sendChatResponse(ctx: any): Promise<string> {
