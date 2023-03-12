@@ -1,4 +1,4 @@
-import { openaiKey } from "./config.ts";
+import { openaiKey } from "../config.ts";
 
 export interface Message {
   role: "user" | "assistant" | "system";

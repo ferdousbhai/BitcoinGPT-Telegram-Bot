@@ -31,4 +31,4 @@ Deno.test("test messagesToText", () => {
 
 
 // Run the tests with:
-// deno test --allow-env --allow-net --allow-read openai.test.ts
+// deno test --allow-env --allow-net --allow-read .\openai\openai.test.ts
