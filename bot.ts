@@ -21,7 +21,7 @@ bot.command("memory", async (ctx) => {
     const memory = await convertHistoryToPerspective(character, history);
     await ctx.reply(memory);
   } else {
-    const responseIdeas = ["We just started talking!", "I don't have any memory yet."];
+    const responseIdeas = ["We just started talking!", "I don't have any memory yet.", "😕", "😖", "🤨", "😶", "🤔", "💭"];
     await ctx.reply(random(responseIdeas));
   }
 });
