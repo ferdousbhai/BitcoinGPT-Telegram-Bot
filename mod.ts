@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.178.0/http/server.ts";
 import { webhookCallback } from "https://deno.land/x/grammy@v1.14.1/mod.ts";
-import bot from "./bot.ts";
+import bot from "./src/bot.ts";
 
 // The webhook handler function: Handles requests from the Telegram bot’s webhook.
 const handleUpdate = webhookCallback(bot, "std/http");
@@ -20,7 +20,7 @@ serve(async (req) => {
     }
   }
   // Ignore any requests that are not from the webhook:
-  return new Response(); 
+  return new Response();
 });
 
 // Configure the bot’s webhook settings:
