@@ -3,24 +3,26 @@ import { Message, messagesToText } from "./openai/openai.ts";
 import {
   fetchChatGPTWithMemory,
   summarizeConversation,
+  convertHistoryToPerspective,
 } from "./memory/memory.ts";
 import { CHAT_TURN_BUFFER_SIZE, systemPrompt } from "../config.ts";
 
 const chatBuffer = [] as Message[]; // Recent messages
 
-let memory: string; // Summary of the older messages
+let history: string; // Summary of the older messages
 
 const bot = new Bot(Deno.env.get("TELEGRAM_BOT_TOKEN")!);
 
 bot.command("startover", async (ctx) => {
   chatBuffer.length = 0;
-  memory = "";
+  history = "";
   chatBuffer.push({ role: "user", content: "Let's start over!" });
   await sendChatResponse(ctx);
 });
 
 bot.command("memory", async (ctx) => {
-  if (memory) {
+  if (history) {
+    const memory = await convertHistoryToPerspective(history);
     await ctx.reply(memory);
   } else {
     chatBuffer.push({
@@ -44,12 +46,12 @@ bot.on("message", async (ctx) => {
     // Update the history with the user's message
     if (chatBuffer.length > CHAT_TURN_BUFFER_SIZE * 2) {
       const oldMessages = chatBuffer.splice(0, 2); // Remove the oldest turn and save them for summarization
-      memory = await summarizeConversation(memory, oldMessages);
+      history = await summarizeConversation(history, oldMessages);
     }
     // Log the conversation
     console.log("*********************\n");
     console.log(messagesToText(chatBuffer));
-    if (memory) console.log("Summary:\n" + memory);
+    if (history) console.log("Summary:\n" + history);
   }
 });
 
@@ -61,7 +63,7 @@ async function sendChatResponse(ctx: any): Promise<string> {
   await ctx.api.sendChatAction(ctx.chat.id, "typing");
   // Call the ChatGPT API to generate a response
   const completionText = await fetchChatGPTWithMemory(
-    memory,
+    history,
     [{ role: "system", content: systemPrompt }, ...chatBuffer],
   );
   // Reply to the user

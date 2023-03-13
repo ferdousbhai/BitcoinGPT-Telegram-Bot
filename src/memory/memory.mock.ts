@@ -1,4 +1,4 @@
-import { fetchChatGPTWithMemory, summarizeConversation } from "./memory.ts";
+import { fetchChatGPTWithMemory, summarizeConversation, convertHistoryToPerspective } from "./memory.ts";
 
 const summary = await summarizeConversation(
   "Satoshi Nakamoto is having a conversation with a user. The user is unsure if democracy is the best form of governance. Satoshi has very nuanced views on this.",
@@ -15,5 +15,10 @@ const completionText = await fetchChatGPTWithMemory(
 );
 console.log(completionText);
 
-// Run the tests with:
-// deno test --allow-env --allow-net --allow-read .\memory\memory.test.ts
+const perspective = await convertHistoryToPerspective(
+  "In the conversation, the user asks you opinion on communism. You respond saying that you thinks it's a good idea.",
+);
+console.log(perspective);
+
+// Run with:
+// deno run --allow-all .\src\memory\memory.mock.ts

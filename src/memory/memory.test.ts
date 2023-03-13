@@ -1,4 +1,4 @@
-import { fetchChatGPTWithMemory, summarizeConversation } from "./memory.ts";
+import { fetchChatGPTWithMemory, summarizeConversation, convertHistoryToPerspective } from "./memory.ts";
 import { assert } from "https://deno.land/std@0.179.0/testing/asserts.ts";
 
 Deno.test("test summarizeConversation", {
@@ -32,5 +32,18 @@ Deno.test("test fetchChatGPTWithHistory", {
   }
 });
 
+Deno.test("test convertHistoryToPerspective", {
+  permissions: { net: true, env: true, read: true },
+}, async () => {
+  const perspective = await convertHistoryToPerspective(
+    "In the conversation, the user asks you opinion on communism. You respond saying that you thinks it's a good idea.",
+  );
+  if (perspective) {
+    assert(perspective.length > 0);
+  } else {
+    assert(false);
+  }
+});
+
 // Run the tests with:
-// deno test --allow-env --allow-net --allow-read .\src\memory\memory.test.ts
+// deno test --allow-all .\src\memory\memory.test.ts
