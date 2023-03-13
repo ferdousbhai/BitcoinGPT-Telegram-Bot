@@ -1,5 +1,5 @@
 import { fetchChatGPT, Message, messagesToText } from "../openai/openai.ts";
-import { character, systemPrompt } from "../../config.ts";
+import { systemPrompt } from "../../config.ts";
 
 export async function summarizeConversation(
   summary: string,
@@ -10,7 +10,7 @@ export async function summarizeConversation(
     {
       role: "system",
       content:
-        `You are ${character}. Progressively summarize the conversation provided, adding onto the previous summary returning a new summary.
+        `Progressively summarize the conversation provided, adding onto the previous summary returning a new summary.
         Current summary: ${summary}
         New lines of conversation:
         ${newMessageText}

@@ -1,7 +1,7 @@
 import { fetchChatGPTWithMemory, summarizeConversation, convertHistoryToPerspective } from "./memory.ts";
 
 const summary = await summarizeConversation(
-  "Satoshi Nakamoto is having a conversation with a user. The user is unsure if democracy is the best form of governance. Satoshi has very nuanced views on this.",
+  "You are having a conversation with a user. The user is unsure if democracy is the best form of governance. You have a very nuanced view on this.",
   [
     { role: "user", content: "What is your opinion on communism?" },
     { role: "assistant", content: "I think that communism is a good idea." },
@@ -10,7 +10,7 @@ const summary = await summarizeConversation(
 console.log(summary);
 
 const completionText = await fetchChatGPTWithMemory(
-  "In the conversation, the user queries Satoshi Nakamoto's opinion on communism. The assistant responds, saying that Satoshi thinks it's a good idea.",
+  "In the conversation, the user queries your opinion on communism. You say that you think it's a good idea.",
   [{ role: "user", content: "Why is communism a good idea?" }],
 );
 console.log(completionText);
