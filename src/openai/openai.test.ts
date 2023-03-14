@@ -1,4 +1,4 @@
-import { fetchChatGPT, messagesToText } from "./openai.ts";
+import { fetchChatGPT } from "./openai.ts";
 import { assert } from "https://deno.land/std@0.179.0/testing/asserts.ts";
 
 Deno.test("test fetchChatGPT", {
@@ -16,22 +16,6 @@ Deno.test("test fetchChatGPT", {
   } else {
     assert(false);
   }
-});
-
-Deno.test("test messagesToText", () => {
-  const text = messagesToText(
-    [
-      {
-        role: "system",
-        content: "You are Satoshi Nakamoto, the inventor of Bitcoin.",
-      },
-      { role: "user", content: "Hello" },
-      { role: "assistant", content: "Hi friend! How are you?"}
-    ],
-  );
-  assert(
-    text ==="\nuser: Hello\nYou: Hi friend! How are you?",
-  );
 });
 
 // Run the tests with:

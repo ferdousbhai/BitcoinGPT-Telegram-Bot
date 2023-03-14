@@ -1,4 +1,8 @@
-import { fetchChatGPTWithMemory, summarizeConversation, convertHistoryToPerspective } from "./memory.ts";
+import {
+  convertHistoryToPerspective,
+  fetchChatGPTWithMemory,
+  summarizeConversation,
+} from "./memory.ts";
 import { assert } from "https://deno.land/std@0.179.0/testing/asserts.ts";
 
 Deno.test("test summarizeConversation", {

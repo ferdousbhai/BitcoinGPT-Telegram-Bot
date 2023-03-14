@@ -1,5 +1,17 @@
-import { fetchChatGPT, Message, messagesToText } from "../openai/openai.ts";
+import { fetchChatGPT, Message } from "../openai/openai.ts";
 import { systemPrompt } from "../../config.ts";
+
+export function messagesToText(messages: Message[]): string {
+  return messages.map((message) => {
+    if (message.role === "assistant") {
+      return `You: ${message.content}`;
+    } else if (message.role === "user") {
+      return `${message.role}: ${message.content}`;
+    } else {
+      return "";
+    }
+  }).join("\n");
+}
 
 export async function summarizeConversation(
   summary: string,
@@ -41,15 +53,14 @@ export async function fetchChatGPTWithMemory(
 }
 
 export async function convertHistoryToPerspective(
-  memory: string
+  memory: string,
 ): Promise<string> {
   const completionText = await fetchChatGPT([
     {
       role: "system",
-      content:
-      `Retell the following from your perspective.
+      content: `Retell the following from your perspective.
       ${memory}`,
-    }
+    },
   ]);
   return completionText!;
 }

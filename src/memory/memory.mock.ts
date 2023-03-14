@@ -1,4 +1,8 @@
-import { fetchChatGPTWithMemory, summarizeConversation, convertHistoryToPerspective } from "./memory.ts";
+import {
+  convertHistoryToPerspective,
+  fetchChatGPTWithMemory,
+  summarizeConversation,
+} from "./memory.ts";
 
 const summary = await summarizeConversation(
   "You are having a conversation with a user. The user is unsure if democracy is the best form of governance. You have a very nuanced view on this.",

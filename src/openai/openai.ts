@@ -5,20 +5,9 @@ export interface Message {
   content: string;
 }
 
-export function messagesToText(messages: Message[]): string {
-  return messages.map((message) => {
-    if (message.role === "assistant") {
-      return `You: ${message.content}`;
-    } else if (message.role === "user") {
-      return `${message.role}: ${message.content}`;
-    } else {
-      return "";
-    }
-  }).join("\n");
-}
-
 export async function fetchChatGPT(
   promptMessages: Array<Message>,
+  temperature = 1,
 ): Promise<string | undefined> {
   try {
     const response = await fetch(
@@ -32,6 +21,7 @@ export async function fetchChatGPT(
         body: JSON.stringify({
           model: "gpt-3.5-turbo",
           messages: promptMessages,
+          temperature: temperature,
         }),
       },
     );
