@@ -5,8 +5,10 @@ import {
   fetchChatGPTWithMemory,
   summarizeConversation,
 } from "./memory/memory.ts";
-import { CHAT_CONTEXT_SIZE, systemPrompt } from "../config.ts";
+import { systemPrompt } from "../config.ts";
 
+
+const CHAT_CONTEXT_SIZE = 4; // Number of recent messages to remember for chat context
 
 const chatBuffer = [] as Message[]; // Recent messages
 

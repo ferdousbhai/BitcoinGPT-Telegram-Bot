@@ -1,5 +1,5 @@
+import "https://deno.land/std@0.178.0/dotenv/load.ts";
 import {
-  convertHistoryToPerspective,
   fetchChatGPTWithMemory,
   summarizeConversation,
 } from "./memory.ts";
@@ -19,10 +19,6 @@ const completionText = await fetchChatGPTWithMemory(
 );
 console.log(completionText);
 
-const perspective = await convertHistoryToPerspective(
-  "In the conversation, the user asks you opinion on communism. You respond saying that you thinks it's a good idea.",
-);
-console.log(perspective);
 
 // Run with:
 // deno run --allow-all .\src\memory\memory.mock.ts
