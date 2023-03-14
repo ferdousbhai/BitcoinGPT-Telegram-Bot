@@ -38,7 +38,7 @@ bot.command("sentiment", async (ctx) => {
 bot.command("tldr", async (ctx) => {
   const messageText = ctx.message?.text?.trim();
   if (messageText) {
-    const tldr = await getTldr(message);
+    const tldr = await getTldr(messageText);
     await ctx.reply(tldr);
   }
   else {
