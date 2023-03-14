@@ -4,11 +4,9 @@ import {
   messagesToText,
   fetchChatGPTWithMemory,
   summarizeConversation,
-  convertHistoryToPerspective,
 } from "./memory/memory.ts";
-import { getSentiment } from "./sentiment/sentiment.ts";
 import { CHAT_CONTEXT_SIZE, systemPrompt } from "../config.ts";
-import { getTldr } from "./tldr/tldr.ts";
+
 
 const chatBuffer = [] as Message[]; // Recent messages
 
@@ -16,35 +14,6 @@ let history: string; // Summary of the older messages
 
 const bot = new Bot(Deno.env.get("TELEGRAM_BOT_TOKEN")!);
 
-
-bot.command("memory", async (ctx) => {
-  if (history) {
-    const memory = await convertHistoryToPerspective(history);
-    await ctx.reply(memory);
-  } else {
-    chatBuffer.push({
-      role: "user",
-      content: "what do you remember from our conversation earlier?",
-    });
-    await sendChatResponse(ctx);
-  }
-});
-
-bot.command("sentiment", async (ctx) => {
-  const memory = await getSentiment(chatBuffer);
-  await ctx.reply(memory);
-});
-
-bot.command("tldr", async (ctx) => {
-  const messageText = ctx.message?.text?.trim();
-  if (messageText) {
-    const tldr = await getTldr(messageText);
-    await ctx.reply(tldr);
-  }
-  else {
-    await ctx.reply("Please reply to a message with '/tldr' command to get a summary of the message.");
-  }
-});
 
 // Listen for messages
 bot.on("message", async (ctx) => {

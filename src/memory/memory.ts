@@ -51,16 +51,3 @@ export async function fetchChatGPTWithMemory(
   ]);
   return completionText!;
 }
-
-export async function convertHistoryToPerspective(
-  memory: string,
-): Promise<string> {
-  const completionText = await fetchChatGPT([
-    {
-      role: "system",
-      content: `Retell the following from your perspective.
-      ${memory}`,
-    },
-  ]);
-  return completionText!;
-}
